@@ -2,9 +2,151 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <style>
+
+    	img {
+    		display: none;
+    	}
+
+    	canvas {
+    		background: #22aa66;
+    	}
+
+    </style>
   </head>
   <body>
     <h1>Merry Christmas!</h1>
     <p>this is your new website</p>
+
+    <img id="granch" src="granch.png">
+    <img id="stone101" src="stone_101.png">
+    <img id="stone102" src="stone_102.png">
+    <img id="stone104" src="stone_104.png">
+    <img id="longGrass" src="long_grass.png">
+    <img id="leaves" src="leaves.png">
+    <img id="muddyGround" src="muddy_ground.png">
+    <img id="mudPile" src="mud_pile.png">
+
+    <canvas id="myCanvas" width="1024" height="768"></canvas>
+    <script>
+
+    	const canvas = document.getElementById("myCanvas");
+		const ctx = canvas.getContext("2d");
+		
+		const granch = document.getElementById("granch");
+
+		const stone101 = document.getElementById("stone101");
+		const stone102 = document.getElementById("stone102");
+		const stone104 = document.getElementById("stone104");
+
+		const longGrass = document.getElementById("longGrass");
+		const leaves = document.getElementById("leaves");
+		const muddyGround = document.getElementById("muddyGround");
+		const mudPile = document.getElementById("mudPile");
+
+		const granchW = 128;
+		const granchH = 256;
+		var granchX = 600;
+		var granchY = 240;
+		var granchTargetX = granchX;
+		var granchTargetY = granchY;
+
+		var foundStone101 = false;
+		var foundStone102 = false;
+		var foundStone104 = false;
+
+		function onClick(e) {
+		    var element = canvas;
+		    var offsetX = 0, offsetY = 0
+		
+		    if (element.offsetParent) {
+		    	do {
+		    		offsetX += element.offsetLeft;
+		        	offsetY += element.offsetTop;
+		      	} while ((element = element.offsetParent));
+		    }
+		
+		    granchTargetX = e.pageX - offsetX;
+		    granchTargetY = e.pageY - offsetY;
+		    granchTargetX -= 0.5*granchW;
+		    granchTargetY -= 0.5*granchH;
+		}
+		canvas.addEventListener("click", onClick, false);
+
+		function drawStone102(x, y) {
+			ctx.drawImage(leaves, x - 16, y + 16, 128, 128);
+			ctx.drawImage(stone102, x, y, 64, 64);
+
+			if(!foundStone102) {
+				ctx.drawImage(leaves, x - 32, y - 32, 128, 128);
+
+				let xOffset = (granchX + 0.5*granchW) - (x + 32);
+				let yOffset = (granchY + 0.5*granchH) - (y + 32);
+				let distanceSquared = xOffset*xOffset + yOffset*yOffset;
+				if(distanceSquared < 64*64) {
+					foundStone102 = true;
+					granchTargetX = x + 2*granchW;
+					granchTargetY = y - 0.5*granchH;
+				}
+			}
+		}
+
+		function drawStone101(x, y) {
+			ctx.drawImage(longGrass, x + 20, y - 20, 70, 70);
+			ctx.drawImage(longGrass, x - 20, y - 15, 70, 70);
+
+			ctx.drawImage(stone101, x, y, 64, 64);
+
+			if(!foundStone101) {
+				ctx.drawImage(longGrass, x - 2, y, 70, 70);
+				ctx.drawImage(longGrass, x + 30, y - 20, 70, 70);
+
+				let xOffset = (granchX + 0.5*granchW) - (x + 32);
+				let yOffset = (granchY + 0.5*granchH) - (y + 32);
+				let distanceSquared = xOffset*xOffset + yOffset*yOffset;
+				if(distanceSquared < 64*64) {
+					foundStone101 = true;
+					granchTargetX = x - 2*granchW;
+					granchTargetY = y - 0.5*granchH;
+				}
+			}
+		}
+
+		function drawStone104(x, y) {
+			ctx.drawImage(muddyGround, x - 128, y - 64, 256, 256);
+			ctx.drawImage(stone104, x, y, 64, 64);
+			if(!foundStone104) {
+				ctx.drawImage(mudPile, x - 32, y - 48, 128, 128);
+
+				let xOffset = (granchX + 0.5*granchW) - (x + 32);
+				let yOffset = (granchY + 0.5*granchH) - (y + 32);
+				let distanceSquared = xOffset*xOffset + yOffset*yOffset;
+				if(distanceSquared < 64*64) {
+					foundStone104 = true;
+					granchTargetX = x - 2*granchW;
+					granchTargetY = y - 0.5*granchH;
+				}
+			}
+		}
+
+		function draw() {
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+			drawStone101(700, 640);
+			drawStone102(240, 320);
+			drawStone104(667, 92);
+
+			ctx.drawImage(longGrass, 64, 128, 70, 70);
+			ctx.drawImage(longGrass, 112, 111, 72, 72);
+			ctx.drawImage(longGrass, 90, 140, 64, 64);
+			ctx.drawImage(leaves, 400, 200, 128, 128);
+
+			ctx.drawImage(granch, granchX, granchY, granchW, granchH);
+    		granchX = 0.5*(granchX + granchTargetX);
+    		granchY = 0.5*(granchY + granchTargetY);
+		}
+		setInterval(draw, 10);
+
+    </script>
   </body>
 </html>
