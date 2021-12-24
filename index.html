@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <style>
 
-    	img {
+    	.resources {
     		display: none;
     	}
 
@@ -12,22 +12,65 @@
     		background: #22aa66;
     	}
 
+    	body {
+		  	background-color: #dbf1b7;
+		}
+
+		h1 {
+		    padding:auto;
+			margin:auto;
+		}
+
+		.header {
+		  margin: auto;
+		  float: center;
+		  color: #ffffff;
+		  font-family: fantasy, copperplate, sans-serif;
+		  font-size: 3vw;
+		  text-align: center;
+		  background-color: #ff0101;
+		  padding: 15px;
+		}
+		
+		.content {
+		    margin:auto;
+		    padding: auto;
+		    text-align: center;
+		    font-family: monospace, monaco, sans-serif;
+		}
+
+		.padding {
+			height: 50vw;
+		}
+
     </style>
   </head>
   <body>
-    <h1>Merry Christmas!</h1>
-    <p>this is your new website</p>
+  	<div class="resources">
+    	<img id="granch" src="granch.png">
+    	<img id="stone101" src="stone_101.png">
+    	<img id="stone102" src="stone_102.png">
+    	<img id="stone104" src="stone_104.png">
+    	<img id="longGrass" src="long_grass.png">
+    	<img id="leaves" src="leaves.png">
+    	<img id="muddyGround" src="muddy_ground.png">
+    	<img id="mudPile" src="mud_pile.png">
+	</div>
 
-    <img id="granch" src="granch.png">
-    <img id="stone101" src="stone_101.png">
-    <img id="stone102" src="stone_102.png">
-    <img id="stone104" src="stone_104.png">
-    <img id="longGrass" src="long_grass.png">
-    <img id="leaves" src="leaves.png">
-    <img id="muddyGround" src="muddy_ground.png">
-    <img id="mudPile" src="mud_pile.png">
+	<div class="header">
+    	<h1> Merry Christmas Grancher!</h1>
+  	</div>
+    
 
-    <canvas id="myCanvas" width="1024" height="768"></canvas>
+  	<div class="content">
+	    <h2>Welcome to your new website!!!</h2>
+    	<hr>
+    	<img src="granch.jpg" width="50%">
+    	<p>Lots of love from Rio, Chocs, Tom and Isobel xxx</p>
+    	<canvas id="myCanvas" width="1024" height="768"></canvas>
+    </div>
+
+    
     <script>
 
     	const canvas = document.getElementById("myCanvas");
@@ -51,6 +94,7 @@
 		var granchTargetX = granchX;
 		var granchTargetY = granchY;
 
+		var gameBegan = false;
 		var foundStone101 = false;
 		var foundStone102 = false;
 		var foundStone104 = false;
@@ -70,6 +114,8 @@
 		    granchTargetY = e.pageY - offsetY;
 		    granchTargetX -= 0.5*granchW;
 		    granchTargetY -= 0.5*granchH;
+
+		    gameBegan = true;
 		}
 		canvas.addEventListener("click", onClick, false);
 
@@ -144,6 +190,28 @@
 			ctx.drawImage(granch, granchX, granchY, granchW, granchH);
     		granchX = 0.5*(granchX + granchTargetX);
     		granchY = 0.5*(granchY + granchTargetY);
+
+    		if(!gameBegan) {
+    			ctx.font = "48px serif";
+    			ctx.fillStyle = "#aa99ee";
+    			ctx.fillText("click to move", 300, 550);
+    			ctx.fillText("try to find 3 boundary stones", 300, 600);
+    		}
+
+    		ctx.font = "32px serif";
+    		let layout = 700;
+    		if(foundStone101) {
+    			ctx.fillText("you found stone 101!", 50, layout);	
+    			layout -= 34;
+    		}
+    		if(foundStone102) {
+    			ctx.fillText("you found stone 102!", 50, layout);	
+    			layout -= 34;
+    		}
+    		if(foundStone104) {
+    			ctx.fillText("you found stone 104!", 50, layout);	
+    			layout -= 34;
+    		}
 		}
 		setInterval(draw, 10);
 
